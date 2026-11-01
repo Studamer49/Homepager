@@ -7,4 +7,4 @@ node_modules/
 .vscode/
 .idea/
 *.json.user
-vivu-homepage-config.json
+homepage-config.json

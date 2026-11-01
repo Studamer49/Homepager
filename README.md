@@ -4,7 +4,7 @@ A simple, friendly homepage that anyone can use — kids, grandparents, everyone
 
 ## How to use
 
-1. Open `vivu_homepage_redesigned.html` in your web browser.
+1. Open `index.html` in your web browser.
 2. Tap the **⚙️ Settings** button (bottom right).
 3. Tap **Categories → + Add category** to make a group of links.
 4. Tap **+ Add link** inside a category, type a name and website address.
@@ -14,9 +14,8 @@ You can change colors, text, fonts, and what's shown — all in Settings. Nothin
 
 ## What's included
 
-- `vivu_homepage_redesigned.html` — the homepage (one file, works right away)
+- `index.html` — the homepage (one file, works right away)
 - `random.html` — a fun random-number page
-- `vivu_homepage_new.css` — older styles (not used by the main page)
 - `LICENSE` — MIT License
 
 Made with curiosity. Enjoy!
