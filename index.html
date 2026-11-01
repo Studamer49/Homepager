@@ -3,15 +3,970 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="0; url=vivu_homepage_redesigned.html">
-    <title>Loading your homepage...</title>
-    <style>
-        body { font-family: sans-serif; background: #0f172a; color: #cbd5e1; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        a { color: #8b5cf6; text-decoration: underline; }
+    <meta id="theme-color" name="theme-color" content="#0f172a">
+    <title id="page-title">My Homepage</title>
+    <meta name="description" content="A simple, friendly homepage for everyone.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>" id="favicon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link id="google-fonts" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style id="vh-base">
+        *, *::before, *::after { box-sizing: border-box; }
+        #vh-body {
+            font-family: var(--vh-font, 'Outfit', sans-serif);
+            background: var(--vh-bg, #0f172a);
+            color: var(--vh-text, #cbd5e1);
+            overflow-x: hidden;
+        }
+        .glow-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: -1;
+            animation: move 20s infinite alternate;
+        }
+        @keyframes move {
+            from { transform: translate(-10%, -10%); }
+            to { transform: translate(20%, 20%); }
+        }
+        .glass {
+            background: var(--vh-card, rgba(30, 41, 59, 0.7));
+            backdrop-filter: blur(var(--vh-blur, 12px));
+            -webkit-backdrop-filter: blur(var(--vh-blur, 12px));
+            border: 1px solid var(--vh-border, rgba(255, 255, 255, 0.1));
+        }
+        .section-btn { transition: background 0.2s; }
+        .section-btn:hover { background: rgba(255, 255, 255, 0.05); }
+        .collapse-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.35s ease;
+        }
+        .collapse-content.open { grid-template-rows: 1fr; }
+        .collapse-inner { overflow: hidden; }
+        .link-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            padding: 1rem 0.75rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid transparent;
+        }
+        .link-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        .link-card .link-sub {
+            font-size: 0.65rem;
+            font-weight: 400;
+            opacity: 0.6;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .link-card .link-icon {
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+        .search-pill {
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        .search-pill:hover, .search-pill.active {
+            border-color: rgba(var(--vh-accent-rgb), 0.5);
+            background: rgba(var(--vh-accent-rgb), 0.15);
+        }
+        .search-pill.active { color: var(--vh-accent-1); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--vh-bg, #0f172a); }
+        ::-webkit-scrollbar-thumb { background: var(--vh-muted, #334155); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeInUp 0.6s ease both; }
+        .fade-in-d1 { animation-delay: 0.1s; }
+        .fade-in-d2 { animation-delay: 0.2s; }
+        .fade-in-d3 { animation-delay: 0.3s; }
+        .fade-in-d4 { animation-delay: 0.4s; }
+        .fade-in-d5 { animation-delay: 0.5s; }
+        .fade-in-d6 { animation-delay: 0.6s; }
+
+        /* Big friendly buttons */
+        .big-btn {
+            min-height: 56px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
     </style>
+    <style id="vh-theme"></style>
 </head>
-<body>
-    <p>Loading your homepage...</p>
-    <p><a href="vivu_homepage_redesigned.html">click here if it does not open automatically</a></p>
+<body id="vh-body" class="text-slate-200 min-h-screen">
+
+    <!-- 📖 TUTORIAL OVERLAY -->
+    <div id="tutorial-overlay" class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center hidden">
+        <div class="max-w-md w-full p-8 text-center">
+            <div class="w-16 h-16 rounded-full bg-purple-500 flex items-center justify-center mx-auto mb-6 text-3xl">📖</div>
+            <h2 class="text-3xl font-bold text-white mb-2">Welcome!</h2>
+            <p id="tutorial-text" class="text-lg text-slate-300 mb-8 leading-relaxed">This is your very own homepage. You can put your favorite websites here.</p>
+            <div class="space-y-4 mb-8" id="tutorial-steps">
+                <!-- steps injected by JS -->
+            </div>
+            <div class="flex gap-3">
+                <button id="tutorial-prev" class="px-6 py-3 rounded-2xl bg-slate-800 text-slate-400 hover:bg-slate-700 transition big-btn disabled:opacity-50 disabled:pointer-events-none">Back</button>
+                <button id="tutorial-next" class="px-6 py-3 rounded-2xl bg-purple-500 text-white hover:bg-purple-400 transition big-btn">Next</button>
+            </div>
+            <p class="mt-6 text-xs text-slate-500 cursor-pointer underline underline-offset-4" id="tutorial-skip">Skip tutorial</p>
+        </div>
+    </div>
+
+    <!-- ⚙️ SETTINGS DRAWER (opens/closes) -->
+    <div id="settings-backdrop" class="fixed inset-0 z-40 bg-black/60 backdrop-blur-md opacity-0 transition-opacity duration-300 pointer-events-none" aria-hidden="true" onclick="closeSettings()"></div>
+    <div id="settings-drawer" class="fixed right-0 top-0 z-50 h-full w-full sm:w-[420px] max-w-full transform translate-x-full transition-transform duration-300 bg-[var(--vh-card)] border-l border-[var(--vh-border)] shadow-2xl flex flex-col">
+        <div class="shrink-0 p-6 border-b border-[var(--vh-border)] flex items-center justify-between">
+            <h3 class="text-2xl font-bold text-[var(--vh-text)]">⚙️ Settings</h3>
+            <button id="settings-close-btn" class="text-[var(--vh-muted)] hover:text-[var(--vh-text)] transition-colors text-2xl" aria-label="Close settings" onclick="closeSettings()">✕</button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-6 space-y-10">
+            <div class="flex gap-2 mb-8 border-b border-[var(--vh-border)] pb-4">
+                <button class="tab-btn px-5 py-3 text-lg font-medium border-b-4 border-[var(--vh-accent-1)] text-[var(--vh-accent-1)]" data-tab="looks">Looks</button>
+                <button class="tab-btn px-5 py-3 text-lg font-medium text-[var(--vh-muted)] hover:text-[var(--vh-text)] transition-colors" data-tab="words">Words</button>
+                <button class="tab-btn px-5 py-3 text-lg font-medium text-[var(--vh-muted)] hover:text-[var(--vh-text)] transition-colors" data-tab="showhide">Show / Hide</button>
+                <button class="tab-btn px-5 py-3 text-lg font-medium text-[var(--vh-muted)] hover:text-[var(--vh-text)] transition-colors" data-tab="categories">Categories</button>
+                <button class="tab-btn px-5 py-3 text-lg font-medium text-[var(--vh-muted)] hover:text-[var(--vh-text)] transition-colors" data-tab="search">Search</button>
+            </div>
+
+            <div class="tab-panel space-y-8" id="panel-looks"></div>
+            <div class="tab-panel hidden space-y-8" id="panel-words"></div>
+            <div class="tab-panel hidden space-y-8" id="panel-showhide"></div>
+            <div class="tab-panel hidden space-y-8" id="panel-categories"></div>
+            <div class="tab-panel hidden space-y-8" id="panel-search"></div>
+
+            <div class="pt-8 border-t border-[var(--vh-border)] space-y-4">
+                <button onclick="exportConfig()" class="w-full big-btn py-4 rounded-2xl border border-[var(--vh-border)] text-[var(--vh-text)] hover:bg-white/5 transition flex items-center justify-center gap-3">
+                    💾 Save settings to file
+                </button>
+                <label class="w-full big-btn py-4 rounded-2xl bg-[var(--vh-accent-1)] text-white hover:opacity-90 transition flex items-center justify-center gap-3" title="Load settings from file">
+                    📂 Load settings from file
+                    <input type="file" id="config-import" class="hidden" accept=".json" onchange="importConfig(this)">
+                </label>
+                <button onclick="resetConfig()" class="w-full big-btn py-4 rounded-2xl border border-red-500/30 text-red-400 hover:bg-red-500/5 transition">🔄 Start over (reset)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating settings toggle -->
+    <button id="settings-fab" class="fixed bottom-8 right-8 z-50 w-20 h-20 rounded-full bg-[var(--vh-card)] border-2 border-[var(--vh-border)] text-[var(--vh-text)] hover:bg-white/10 hover:scale-105 transition-all shadow-2xl flex items-center justify-center text-2xl" title="Settings" aria-label="Open settings" onclick="openSettings()">⚙️</button>
+
+    <!-- Floating tutorial button -->
+    <button id="tutorial-fab" class="fixed bottom-8 left-8 z-50 w-20 h-20 rounded-full bg-[var(--vh-card)] border-2 border-[var(--vh-border)] text-[var(--vh-text)] hover:bg-white/10 hover:scale-105 transition-all shadow-2xl flex items-center justify-center text-2xl" title="Help / Tutorial" aria-label="Open tutorial" onclick="startTutorial()">📖</button>
+
+    <!-- CLASS-REGISTRATION HELPER -->
+    <div aria-hidden="true" class="fixed -top-[9999px]" style="pointer-events:none">
+        <div class="text-[var(--vh-text)] text-[var(--vh-muted)] border-[var(--vh-border)] bg-[var(--vh-card)] bg-white/5 focus:ring-0 accent-[var(--vh-accent-1)] w-5 h-5 rounded-lg rounded-xl rounded-full p-0 p-3 p-4 p-5 px-3 px-4 py-2 py-3 w-10 h-10 w-14 h-14 w-20 h-20 flex-1 shrink-0 flex-col flex gap-1 gap-2 gap-3 gap-4 gap-6 items-center justify-center justify-between justify-end text-xs text-sm text-base text-lg text-2xl text-3xl font-medium font-bold mb-1 mt-2 mb-3 mt-4 mb-6 ml-2 mr-2 w-full hidden translate-x-full opacity-0 pointer-events-none backdrop-blur-md backdrop-blur-sm fixed absolute z-40 z-50 z-[60] z-[100] top-0 right-0 bottom-0 inset-0 inset-x-0 h-full w-full max-w-full sm:w-[420px] cursor-pointer border-b-2 border-none border-l focus:border-[var(--vh-accent-1)]"></div>
+    </div>
+
+    <div class="glow-bg">
+        <div class="blob" id="blob-1" style="top: -100px; left: -100px;"></div>
+        <div class="blob" id="blob-2" style="bottom: -100px; right: -100px; animation-delay: -5s;"></div>
+    </div>
+
+    <div class="container mx-auto px-4 py-10 max-w-5xl">
+        <header class="text-center mb-8 fade-in">
+            <p id="greeting" class="text-lg font-light text-[var(--vh-muted)] mb-1 tracking-wide"></p>
+            <h1 id="site-title" class="text-5xl sm:text-7xl font-extrabold mb-2 tracking-tight bg-clip-text text-transparent" style="background: linear-gradient(to right, var(--vh-accent-1), var(--vh-accent-2));">
+                My Homepage
+            </h1>
+            <div id="clock" class="text-base sm:text-xl font-light text-[var(--vh-muted)] tracking-widest"></div>
+        </header>
+
+        <div class="text-center mb-6 fade-in fade-in-d1">
+            <div class="glass rounded-2xl p-4 inline-block shadow-2xl" id="weather-widget-container"></div>
+        </div>
+
+        <div class="max-w-2xl mx-auto mb-10 relative fade-in fade-in-d2">
+            <div class="glass rounded-full px-6 py-3 flex items-center gap-3 shadow-xl focus-within:ring-2 focus-within:ring-[var(--vh-accent-1)] transition-all">
+                <div class="flex gap-1 flex-shrink-0" id="search-pills"></div>
+                <input id="searchInput" name="q" type="text" placeholder="Search or type a website..." autofocus
+                    class="w-full bg-transparent text-lg focus:outline-none placeholder-[var(--vh-muted)]">
+                <button onclick="doSearch()" class="p-2 hover:text-[var(--vh-accent-1)] transition-colors flex-shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </button>
+            </div>
+            <p id="search-hint" class="text-center text-xs text-[var(--vh-muted)] mt-2">Press <kbd class="px-1.5 py-0.5 rounded bg-[var(--vh-muted)]/20 text-[var(--vh-text)] text-[10px] font-mono">/</kbd> to focus</p>
+        </div>
+
+        <div id="sections-wrapper" class="space-y-5">
+            <!-- categories rendered by JS -->
+        </div>
+
+        <div class="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-6 fade-in fade-in-d6">
+            <div id="notes-wrapper" class="lg:col-span-2 glass rounded-2xl p-6 shadow-2xl">
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-[var(--vh-accent-1)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    My Notes
+                </h2>
+                <textarea id="quick-notes" class="w-full bg-white/10 border border-[var(--vh-border)]/50 rounded-2xl px-5 py-3 h-48 focus:outline-none focus:ring-2 focus:ring-[var(--vh-accent-1)] transition-all placeholder-[var(--vh-muted)] resize-none text-lg" placeholder="Write something..."></textarea>
+                <p class="text-xs text-[var(--vh-muted)] mt-2 text-right"><span id="char-count">0</span> characters</p>
+            </div>
+
+            <div id="quote-wrapper" class="glass rounded-2xl p-6 shadow-2xl flex flex-col justify-center text-center">
+                <div class="mb-4 inline-block mx-auto p-3 bg-[var(--vh-accent-1)]/10 rounded-full text-[var(--vh-accent-1)]">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
+                </div>
+                <h2 class="text-lg font-bold mb-3 uppercase tracking-widest text-[var(--vh-muted)]">Daily Wisdom</h2>
+                <p id="quote" class="text-base italic leading-relaxed text-[var(--vh-text)] min-h-[4rem]"></p>
+                <button onclick="newQuote()" class="mt-4 text-xs text-[var(--vh-muted)] hover:text-[var(--vh-accent-1)] transition-colors">New quote</button>
+            </div>
+        </div>
+
+        <footer id="footer-wrapper" class="mt-12 text-center text-[var(--vh-muted)] text-sm pb-6 fade-in fade-in-d6">
+            <p id="footer-text">Made with ❤️</p>
+        </footer>
+    </div>
+
+    <script>
+        /* ============ CONFIG (blank by default — anyone can build their own) ============ */
+        const STORAGE_KEY = 'homepage_config_v1';
+        const TUTORIAL_KEY = 'homepage_tutorial_v1';
+
+        const PRESETS = {
+            purple: { from: 'rgba(139, 92, 246, 0.15)', to: 'rgba(59, 130, 246, 0.15)', hFrom: 'rgba(139, 92, 246, 0.3)', hTo: 'rgba(59, 130, 246, 0.3)', text: '#8b5cf6' },
+            blue:   { from: 'rgba(59, 130, 246, 0.15)', to: 'rgba(99, 102, 241, 0.15)', hFrom: 'rgba(59, 130, 246, 0.3)', hTo: 'rgba(99, 102, 241, 0.3)', text: '#3b82f6' },
+            pink:   { from: 'rgba(236, 72, 153, 0.15)', to: 'rgba(244, 63, 94, 0.15)', hFrom: 'rgba(236, 72, 153, 0.3)', hTo: 'rgba(244, 63, 94, 0.3)', text: '#ec4899' },
+            slate:  { from: 'rgba(100, 116, 139, 0.15)', to: 'rgba(120, 123, 134, 0.15)', hFrom: 'rgba(100, 116, 139, 0.3)', hTo: 'rgba(120, 123, 134, 0.3)', text: '#94a3b8' },
+            emerald:{ from: 'rgba(16, 185, 129, 0.15)', to: 'rgba(52, 211, 153, 0.15)', hFrom: 'rgba(16, 185, 129, 0.3)', hTo: 'rgba(52, 211, 153, 0.3)', text: '#10b981' },
+            amber:  { from: 'rgba(245, 158, 11, 0.15)', to: 'rgba(251, 191, 36, 0.15)', hFrom: 'rgba(245, 158, 11, 0.3)', hTo: 'rgba(251, 191, 36, 0.3)', text: '#f59e0b' },
+            rose:   { from: 'rgba(244, 63, 94, 0.15)', to: 'rgba(225, 29, 72, 0.15)', hFrom: 'rgba(244, 63, 94, 0.3)', hTo: 'rgba(225, 29, 72, 0.3)', text: '#f43f5e' },
+            indigo: { from: 'rgba(99, 102, 241, 0.15)', to: 'rgba(79, 70, 229, 0.15)', hFrom: 'rgba(99, 102, 241, 0.3)', hTo: 'rgba(79, 70, 229, 0.3)', text: '#6366f1' },
+        };
+
+        const PRESET_NAMES = {
+            purple: 'Purple', blue: 'Blue', pink: 'Pink', slate: 'Slate',
+            emerald: 'Emerald', amber: 'Amber', rose: 'Rose', indigo: 'Indigo'
+        };
+
+        const DEFAULT_CONFIG = {
+            identity: {
+                siteName: 'My Homepage',
+                yourName: 'Friend',
+                footerText: 'Made with ❤️',
+            },
+            appearance: {
+                bgColor: '#0f172a',
+                cardBg: 'rgba(30, 41, 59, 0.7)',
+                textColor: '#cbd5e1',
+                mutedColor: '#94a3b8',
+                accentColor: '#8b5cf6',
+                accentColor2: '#3b82f6',
+                borderColor: 'rgba(255, 255, 255, 0.1)',
+                fontFamily: "'Outfit', sans-serif",
+                blur: '12px',
+                radius: '1rem',
+                animations: true,
+                glassmorphism: true,
+                showClock: true,
+                showGreeting: true,
+                showWeather: true,
+                showNotes: true,
+                showQuote: true,
+                showFooter: true,
+            },
+            widgets: { weatherId: 'ww_2c5f3a6b5e5d4' },
+            searchEngineIndex: 0,
+            searchEngines: [
+                { name: 'Google',    url: 'https://www.google.com/search?q={q}' },
+                { name: 'YouTube',   url: 'https://www.youtube.com/results?search_query={q}' },
+                { name: 'Bing',      url: 'https://www.bing.com/search?q={q}' },
+                { name: 'Wikipedia', url: 'https://en.wikipedia.org/w/index.php?search={q}' },
+            ],
+            quotes: [
+                '“You can do anything you set your mind to.”',
+                '“Be kind to everyone.”',
+                '“Learning is fun!”',
+                '“Talk is cheap. Show me the code.” — Linus Torvalds',
+            ],
+            categories: [],
+            links: {},
+        };
+
+        let config = {};
+
+        /* ============ HELPERS ============ */
+        function escHtml(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]); }
+        function escAttr(s) { return String(s ?? '').replace(/"/g, '&quot;'); }
+        function hexToRgb(hex) {
+            const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(String(hex));
+            return m ? `${parseInt(m[1], 16)}, ${parseInt(m[2], 16)}, ${parseInt(m[3], 16)}` : '139, 92, 246';
+        }
+        function isPlainObject(v) { return v !== null && typeof v === 'object' && !Array.isArray(v); }
+        function deepMerge(def, user) {
+            const out = Array.isArray(def) ? [] : {};
+            for (const k in def) out[k] = def[k];
+            for (const k in user) {
+                if (isPlainObject(user[k]) && isPlainObject(out[k])) out[k] = deepMerge(out[k], user[k]);
+                else out[k] = user[k];
+            }
+            return out;
+        }
+        function clone(v) { return JSON.parse(JSON.stringify(v)); }
+        function setByPath(obj, path, val) {
+            const parts = String(path).split('.');
+            let cur = obj;
+            for (let i = 0; i < parts.length - 1; i++) cur = cur[parts[i]];
+            cur[parts[parts.length - 1]] = val;
+        }
+        function getByPath(obj, path) {
+            return String(path).split('.').reduce((cur, p) => cur == null ? undefined : cur[p], obj);
+        }
+        function readoutId(path) { return 'readout_' + String(path).replace(/[^a-zA-Z0-9]/g, '_'); }
+
+        /* ============ STORAGE ============ */
+        function loadConfig() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                config = raw ? deepMerge(DEFAULT_CONFIG, JSON.parse(raw)) : clone(DEFAULT_CONFIG);
+            } catch (e) { config = clone(DEFAULT_CONFIG); }
+            if (!config.categories) config.categories = [];
+            if (!config.links) config.links = {};
+        }
+        function saveConfig() {
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(config)); } catch (e) {}
+        }
+
+        /* ============ THEME ============ */
+        function applyTheme() {
+            const a = config.appearance;
+            const root = document.documentElement;
+            const set = (k, v) => root.style.setProperty(k, v);
+            set('--vh-bg', a.bgColor);
+            set('--vh-bg-rgb', hexToRgb(a.bgColor));
+            set('--vh-card', a.cardBg);
+            set('--vh-text', a.textColor);
+            set('--vh-muted', a.mutedColor);
+            set('--vh-accent-1', a.accentColor);
+            set('--vh-accent-rgb', hexToRgb(a.accentColor));
+            set('--vh-accent-2', a.accentColor2);
+            set('--vh-accent2-rgb', hexToRgb(a.accentColor2));
+            set('--vh-border', a.borderColor);
+            set('--vh-font', a.fontFamily);
+            set('--vh-blur', a.blur);
+            set('--vh-radius', a.radius);
+            document.body.style.background = a.bgColor;
+            const meta = document.getElementById('theme-color');
+            if (meta) meta.content = a.bgColor;
+            document.querySelectorAll('.blob').forEach(b => {
+                b.style.background = `linear-gradient(135deg, rgba(${hexToRgb(a.accentColor)}, 0.3), rgba(${hexToRgb(a.accentColor2)}, 0.3))`;
+            });
+        }
+
+        function loadFontFamily(family) {
+            const link = document.getElementById('google-fonts');
+            const weights = {
+                "'Outfit', sans-serif": 'Outfit:wght@300;400;600;700;800',
+                "'Inter', sans-serif": 'Inter:wght@300;400;600;700;800',
+                "'Poppins', sans-serif": 'Poppins:wght@300;400;600;700;800',
+                "'Roboto Mono', monospace": 'Roboto Mono:wght@300;400;600;700',
+            };
+            if (family.startsWith('system-ui')) { if (link) link.remove(); return; }
+            const w = weights[family];
+            if (w && link) link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(w)}&display=swap`;
+        }
+
+        /* ============ TUTORIAL ============ */
+        const TUTORIAL_STEPS = [
+            { text: "This is your very own homepage. You can put all your favorite websites here." },
+            { text: "Tap the gear ⚙️ button to open Settings." },
+            { text: "Go to Categories and tap <b>+ Add category</b>. Give it a name like 'Fun' or 'School'." },
+            { text: "Tap <b>+ Add link</b> inside a category. Type a name and a website address (like youtube.com)." },
+            { text: "Close Settings. Your links appear on the page! Tap them to visit." },
+            { text: "You can change colors, text, and anything else anytime in Settings." },
+        ];
+        let tutorialStep = 0;
+
+        function startTutorial() {
+            tutorialStep = 0;
+            renderTutorialStep();
+            document.getElementById('tutorial-overlay').classList.remove('hidden');
+        }
+
+        function renderTutorialStep() {
+            document.getElementById('tutorial-text').textContent = TUTORIAL_STEPS[tutorialStep].text;
+            document.getElementById('tutorial-prev').disabled = tutorialStep === 0;
+            document.getElementById('tutorial-next').textContent = tutorialStep === TUTORIAL_STEPS.length - 1 ? "I got it!" : "Next";
+        }
+
+        document.getElementById('tutorial-next').addEventListener('click', () => {
+            if (tutorialStep >= TUTORIAL_STEPS.length - 1) {
+                finishTutorial();
+            } else {
+                tutorialStep++;
+                renderTutorialStep();
+            }
+        });
+        document.getElementById('tutorial-prev').addEventListener('click', () => {
+            if (tutorialStep > 0) {
+                tutorialStep--;
+                renderTutorialStep();
+            }
+        });
+        document.getElementById('tutorial-skip').addEventListener('click', finishTutorial);
+
+        function finishTutorial() {
+            document.getElementById('tutorial-overlay').classList.add('hidden');
+            try { localStorage.setItem(TUTORIAL_KEY, '1'); } catch (e) {}
+        }
+
+        /* ============ RENDER: PAGE ============ */
+        function setGreeting() {
+            const h = new Date().getHours();
+            let g = 'Good evening';
+            if (h < 12) g = 'Good morning';
+            else if (h < 18) g = 'Good afternoon';
+            const el = document.getElementById('greeting');
+            if (el) el.textContent = g + ', ' + config.identity.yourName;
+        }
+
+        function updateClock() {
+            const el = document.getElementById('clock');
+            if (!el) return;
+            const now = new Date();
+            const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            el.textContent = now.toLocaleDateString('en-US', opts);
+        }
+
+        function renderHeader() {
+            document.getElementById('page-title').textContent = config.identity.siteName;
+            document.title = config.identity.siteName;
+            const h1 = document.getElementById('site-title');
+            if (h1) h1.textContent = config.identity.siteName;
+            const ft = document.getElementById('footer-text');
+            if (ft) ft.textContent = config.identity.footerText;
+            setGreeting();
+        }
+
+        function renderSections() {
+            const wrapper = document.getElementById('sections-wrapper');
+            if (!wrapper) return;
+            let html = '';
+            (config.categories || []).forEach((cat, ci) => {
+                const p = PRESETS[cat.preset] || PRESETS.purple;
+                const links = (config.links[cat.key] || []).map((l, li) => {
+                    return `<a href="${escHtml(l.url)}" target="_blank" rel="noopener" class="link-card">
+                        <span class="link-icon" style="color: ${p.text}">${escHtml(l.icon)}</span>
+                        <span>${escHtml(l.label)}</span>
+                        <span class="link-sub">${escHtml(l.sub)}</span>
+                    </a>`;
+                }).join('');
+                html += `
+                <div class="glass rounded-2xl overflow-hidden shadow-2xl fade-in">
+                    <button class="section-btn w-full px-6 py-6 flex justify-between items-center" onclick="toggleSection(${ci})" style="color: ${p.text}">
+                        <span class="text-2xl font-bold tracking-wider">${escHtml(cat.label)}</span>
+                        <svg id="sec-arrow-${ci}" class="w-6 h-6 transform transition-transform duration-300 ${cat.collapsed ? '' : 'rotate-180'}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="sec-content-${ci}" class="collapse-content ${cat.collapsed ? '' : 'open'}">
+                        <div class="collapse-inner p-6 grid grid-cols-2 sm:grid-cols-3 gap-4" style="--lc-from: ${p.from}; --lc-to: ${p.to}; --lc-from-h: ${p.hFrom}; --lc-to-h: ${p.hTo}">
+                            ${links}
+                        </div>
+                    </div>
+                </div>`;
+            });
+            wrapper.innerHTML = html || '<div class="text-center text-[var(--vh-muted)] text-lg py-16">No categories yet. Open Settings → Categories to add your first one!</div>';
+        }
+
+        function renderSearch() {
+            const container = document.getElementById('search-pills');
+            if (!container) return;
+            const idx = config.searchEngineIndex || 0;
+            container.innerHTML = config.searchEngines.map((e, i) => {
+                const active = i === idx ? 'active' : '';
+                return `<button onclick="setEngine(${i})" id="eng-${i}" class="search-pill rounded-full px-4 py-2 text-base font-medium ${active}" title="${escHtml(e.name)}">${escHtml(e.name)}</button>`;
+            }).join('');
+        }
+
+        function renderWeather() {
+            const container = document.getElementById('weather-widget-container');
+            if (!container) return;
+            container.style.display = config.appearance.showWeather ? 'block' : 'none';
+            if (!config.appearance.showWeather) return;
+            const existing = document.getElementById('ww-script');
+            if (existing) existing.remove();
+            const s = document.createElement('script');
+            s.id = 'ww-script';
+            s.type = 'text/javascript';
+            s.src = `https://www.weather-widget.com/js/widget.js?id=${config.widgets.weatherId}`;
+            container.appendChild(s);
+        }
+
+        function renderVisibility() {
+            const els = {
+                greeting: config.appearance.showGreeting,
+                clock: config.appearance.showClock,
+                notes: config.appearance.showNotes,
+                quote: config.appearance.showQuote,
+                footer: config.appearance.showFooter,
+                'search-hint': true,
+            };
+            for (const [id, show] of Object.entries(els)) {
+                const el = document.getElementById(id);
+                if (el) el.classList.toggle('hidden', !show);
+            }
+        }
+
+        function renderQuotes() {
+            const el = document.getElementById('quote');
+            if (!el || !config.quotes.length) return;
+            el.textContent = config.quotes[Math.floor(Math.random() * config.quotes.length)];
+        }
+
+        function newQuote() {
+            renderQuotes();
+        }
+
+        function renderPage() {
+            renderHeader();
+            renderSearch();
+            renderSections();
+            renderWeather();
+            renderVisibility();
+            renderQuotes();
+        }
+
+        /* ============ RENDER: SETTINGS PANELS ============ */
+        function colorInput(label, path) {
+            const val = getByPath(config, path) || '';
+            return `
+            <div>
+                <label class="text-sm text-[var(--vh-muted)] block mb-2 uppercase tracking-wider">${escHtml(label)}</label>
+                <div class="flex gap-3">
+                    <input type="color" data-set="${path}" value="${escAttr(val)}" class="w-14 h-14 rounded-xl border-0 p-0 cursor-pointer">
+                    <input type="text" data-set="${path}" value="${escAttr(val)}" class="flex-1 bg-white/10 border border-[var(--vh-border)] rounded-xl px-4 py-3 text-sm text-[var(--vh-text)] focus:ring-0 focus:border-[var(--vh-accent-1)] transition readonly" readonly placeholder="${escAttr(val)}">
+                </div>
+            </div>`;
+        }
+
+        function sliderRow(label, path, min, max, step, unit) {
+            const val = getByPath(config, path) || '';
+            return `
+            <div>
+                <div class="flex justify-between text-xs mb-1">
+                    <span class="text-[var(--vh-muted)] uppercase tracking-wider">${escHtml(label)}</span>
+                    <span id="${readoutId(path)}" class="text-[var(--vh-accent-1)] font-mono font-bold">${escHtml(val)}</span>
+                </div>
+                <input type="range" data-set="${path}" min="${min}" max="${max}" step="${step}" value="${escAttr(val)}" class="w-full accent-[var(--vh-accent-1)] h-1.5 bg-[var(--vh-muted)] rounded-lg appearance-none cursor-pointer">
+            </div>`;
+        }
+
+        function toggleRow(label, path, hint) {
+            const checked = getByPath(config, path) ? 'checked' : '';
+            return `
+            <div class="flex items-center justify-between bg-white/5 border border-[var(--vh-border)]/50 rounded-xl p-4">
+                <div>
+                    <label class="text-base text-[var(--vh-text)]">${escHtml(label)}</label>
+                    <p class="text-xs text-[var(--vh-muted)] mt-1">${escHtml(hint)}</p>
+                </div>
+                <input type="checkbox" data-set="${path}" ${checked} class="w-6 h-6 accent-[var(--vh-accent-1)] rounded border-[var(--vh-muted)] bg-transparent">
+            </div>`;
+        }
+
+        function textInput(label, path, placeholder, hint) {
+            const val = getByPath(config, path) || '';
+            return `
+            <div>
+                <label class="text-sm text-[var(--vh-muted)] block mb-2 uppercase tracking-wider">${escHtml(label)}</label>
+                <input data-set="${path}" value="${escAttr(val)}" class="w-full bg-white/10 border border-[var(--vh-border)] rounded-xl px-4 py-3 text-base text-[var(--vh-text)] focus:ring-0 focus:border-[var(--vh-accent-1)] transition" placeholder="${escAttr(placeholder)}">
+                ${hint ? `<p class="text-xs text-[var(--vh-muted)] mt-1">${escHtml(hint)}</p>` : ''}
+            </div>`;
+        }
+
+        function presetSelect(path, current) {
+            let opts = '';
+            for (const [name, p] of Object.entries(PRESETS)) {
+                opts += `<option value="${name}" ${name === current ? 'selected' : ''}>${escHtml(PRESET_NAMES[name])}</option>`;
+            }
+            return `<select data-set="${path}" class="w-full bg-white/10 border border-[var(--vh-border)] rounded-xl px-4 py-3 text-base text-[var(--vh-text)] focus:ring-0 focus:border-[var(--vh-accent-1)] transition">${opts}</select>`;
+        }
+
+        function linkRow(categoryKey, i, l) {
+            return `
+            <div class="flex gap-3 items-center bg-white/5 border border-[var(--vh-border)]/50 rounded-xl p-3">
+                <span class="text-xl shrink-0">${escHtml(l.icon)}</span>
+                <input data-set="links.${categoryKey}.${i}.label" value="${escAttr(l.label)}" class="flex-1 text-base bg-transparent border-none p-0 text-[var(--vh-text)] focus:ring-0" placeholder="Link name">
+                <input data-set="links.${categoryKey}.${i}.url" value="${escAttr(l.url)}" class="flex-1 text-base bg-transparent border-none p-0 text-[var(--vh-text)] focus:ring-0" placeholder="Website address">
+                <input data-set="links.${categoryKey}.${i}.sub" value="${escAttr(l.sub)}" class="w-32 text-base bg-transparent border-none p-0 text-[var(--vh-text)] focus:ring-0" placeholder="Subtitle">
+                <button data-rem-link="links.${categoryKey}.${i}" class="text-[var(--vh-muted)] hover:text-red-400 p-2 text-xl">✕</button>
+            </div>`;
+        }
+
+        function renderCategoryEditor(ci) {
+            const cat = config.categories[ci];
+            const links = config.links[cat.key] || [];
+            const rows = links.map((l, i) => linkRow(cat.key, i, l)).join('');
+            return `
+            <details class="border border-[var(--vh-border)]/50 rounded-2xl p-4 group open">
+                <summary class="font-bold text-[var(--vh-accent-1)] mb-4 cursor-pointer list-none flex items-center gap-3 text-lg">
+                    ${escHtml(cat.label)}
+                </summary>
+                <div class="space-y-3 mb-6">${rows}</div>
+                <button data-add-link="${cat.key}" class="w-full big-btn py-3 rounded-xl border border-[var(--vh-border)] text-[var(--vh-text)] hover:bg-white/5 transition">+ Add link</button>
+                <button data-rem-cat="${ci}" class="w-full py-3 rounded-xl border border-red-500/30 text-red-400 hover:bg-red-500/5 transition mt-3 text-base">Remove this category</button>
+            </details>`;
+        }
+
+        function renderSettings() {
+            const a = config.appearance;
+            const id = config.identity;
+
+            document.getElementById('panel-looks').innerHTML = `
+            <div class="space-y-8">
+                <div class="space-y-3">
+                    <p class="text-base text-[var(--vh-text)]">Colors</p>
+                    <p class="text-sm text-[var(--vh-muted)]">Pick any color. The page changes right away.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    ${colorInput('Page background', 'appearance.bgColor')}
+                    ${colorInput('Card background', 'appearance.cardBg')}
+                    ${colorInput('Main text', 'appearance.textColor')}
+                    ${colorInput('Faint text', 'appearance.mutedColor')}
+                    ${colorInput('Main accent color', 'appearance.accentColor')}
+                    ${colorInput('Second accent color', 'appearance.accentColor2')}
+                    ${colorInput('Borders', 'appearance.borderColor')}
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-sm text-[var(--vh-muted)] block mb-2 uppercase tracking-wider">Font</label>
+                        <select data-set="appearance.fontFamily" class="w-full bg-white/10 border border-[var(--vh-border)] rounded-xl px-4 py-3 text-base text-[var(--vh-text)] focus:ring-0 focus:border-[var(--vh-accent-1)] transition">
+                            <option value="'Outfit', sans-serif" ${a.fontFamily.includes('Outfit') ? 'selected' : ''}>Outfit (friendly)</option>
+                            <option value="'Inter', sans-serif" ${a.fontFamily.includes('Inter') ? 'selected' : ''}>Inter (clear)</option>
+                            <option value="'Poppins', sans-serif" ${a.fontFamily.includes('Poppins') ? 'selected' : ''}>Poppins (round)</option>
+                            <option value="'Roboto Mono', monospace" ${a.fontFamily.includes('Roboto Mono') ? 'selected' : ''}>Roboto Mono (typewriter)</option>
+                            <option value="system-ui, -apple-system, sans-serif" ${a.fontFamily.includes('system-ui') ? 'selected' : ''}>Device font</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        ${sliderRow('Blur', 'appearance.blur', 0, 60, 1, 'px')}
+                        ${sliderRow('Corner roundness', 'appearance.radius', 0, 40, 1, 'rem')}
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    ${toggleRow('Animations on', 'appearance.animations', 'Fade-in effects')}
+                    ${toggleRow('Glass cards on', 'appearance.glassmorphism', 'Frosted look')}
+                </div>
+            </div>`;
+
+            document.getElementById('panel-words').innerHTML = `
+            <div class="space-y-8">
+                ${textInput('Homepage name', 'identity.siteName', 'My Homepage', 'Shown at the top and in the browser tab')}
+                ${textInput('Your name', 'identity.yourName', 'Friend', 'Used in the greeting')}
+                ${textInput('Footer text', 'identity.footerText', 'Made with ❤️', 'Shown at the bottom')}
+                <div>
+                    <label class="text-sm text-[var(--vh-muted)] block mb-2 uppercase tracking-wider">Daily wisdom quotes (one per line)</label>
+                    <textarea data-set="quotes" rows="6" class="w-full bg-white/10 border border-[var(--vh-border)] rounded-xl px-4 py-3 text-base text-[var(--vh-text)] focus:ring-0 focus:border-[var(--vh-accent-1)] transition">${escHtml(config.quotes.join('\n'))}</textarea>
+                </div>
+                <div>
+                    <label class="text-sm text-[var(--vh-muted)] block mb-2 uppercase tracking-wider">Weather widget ID</label>
+                    <input data-set="widgets.weatherId" value="${escAttr(config.widgets.weatherId)}" class="w-full bg-white/10 border border-[var(--vh-border)] rounded-xl px-4 py-3 text-base text-[var(--vh-text)] focus:ring-0 focus:border-[var(--vh-accent-1)] transition" placeholder="Leave as is">
+                    <p class="text-xs text-[var(--vh-muted)] mt-1">Get your own ID from weather-widget.com, or leave this alone.</p>
+                </div>
+            </div>`;
+
+            document.getElementById('panel-showhide').innerHTML = `
+            <div class="space-y-4">
+                ${toggleRow('Greeting', 'appearance.showGreeting', 'Good morning / afternoon / evening')}
+                ${toggleRow('Clock', 'appearance.showClock', 'Live time at the top')}
+                ${toggleRow('Weather widget', 'appearance.showWeather', 'Weather below the header')}
+                ${toggleRow('My Notes', 'appearance.showNotes', 'Note-taking box')}
+                ${toggleRow('Daily wisdom', 'appearance.showQuote', 'Inspiring quote')}
+                ${toggleRow('Footer', 'appearance.showFooter', 'Bottom text')}
+            </div>`;
+
+            document.getElementById('panel-categories').innerHTML = `
+            <div class="space-y-6">
+                <div class="space-y-3">
+                    <p class="text-base text-[var(--vh-text)]">Categories</p>
+                    <p class="text-sm text-[var(--vh-muted)]">Categories are groups of links. Make as many as you like.</p>
+                </div>
+                <div class="space-y-3" id="category-list">
+                    ${config.categories.map((cat, ci) => renderCategoryEditor(ci)).join('') || '<div class="text-sm text-[var(--vh-muted)] text-center py-6">No categories yet. Add one below.</div>'}
+                </div>
+                <button onclick="addCategory()" class="w-full big-btn py-4 rounded-2xl bg-[var(--vh-accent-1)] text-white hover:opacity-90 transition flex items-center justify-center gap-3">
+                    + Add category
+                </button>
+            </div>`;
+
+            document.getElementById('panel-search').innerHTML = `
+            <div class="space-y-8">
+                <div class="space-y-3">
+                    <p class="text-base text-[var(--vh-text)]">Search</p>
+                    <p class="text-sm text-[var(--vh-muted)]">Pick which websites the search bar uses.</p>
+                </div>
+                <div class="space-y-3" id="search-engines-list">${config.searchEngines.map((e, i) => `
+                <div class="flex gap-3 items-center bg-white/5 border border-[var(--vh-border)]/50 rounded-xl p-3">
+                    <input data-set="searchEngines.${i}.name" value="${escAttr(e.name)}" class="flex-1 text-base bg-transparent border-none p-0 text-[var(--vh-text)] focus:ring-0" placeholder="Name">
+                    <input data-set="searchEngines.${i}.url" value="${escAttr(e.url)}" class="flex-2 text-base bg-transparent border-none p-0 text-[var(--vh-text)] focus:ring-0" placeholder="https://example.com/search?q={q}">
+                    <p class="text-xs text-[var(--vh-muted)] shrink-0">Use {q} for the search</p>
+                    <button data-remove="searchEngines.${i}" class="text-[var(--vh-muted)] hover:text-red-400 p-2 text-xl">✕</button>
+                </div>`).join('')}</div>
+                <button onclick="addSearchEngine()" class="w-full py-3 rounded-xl border border-[var(--vh-border)] text-[var(--vh-text)] hover:bg-white/5 transition text-base">+ Add search engine</button>
+            </div>`;
+
+            // tab states
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('border-b-4', 'border-[var(--vh-accent-1)]', 'text-[var(--vh-accent-1)]');
+                b.classList.add('text-[var(--vh-muted)]');
+            });
+            const active = document.querySelector('[data-tab].active') || document.querySelector('[data-tab="looks"]');
+            active.classList.remove('text-[var(--vh-muted)]');
+            active.classList.add('border-b-4', 'border-[var(--vh-accent-1)]', 'text-[var(--vh-accent-1)]');
+
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+            const activeTab = active.dataset.tab;
+            document.getElementById('panel-' + activeTab).classList.remove('hidden');
+        }
+
+        /* ============ SETTINGS UI ============ */
+        let settingsOpen = false;
+
+        function openSettings() {
+            settingsOpen = true;
+            document.getElementById('settings-drawer').classList.remove('translate-x-full');
+            document.getElementById('settings-backdrop').classList.remove('opacity-0', 'pointer-events-none');
+            document.getElementById('settings-fab').classList.add('hidden');
+            renderSettings();
+        }
+
+        function closeSettings() {
+            settingsOpen = false;
+            document.getElementById('settings-drawer').classList.add('translate-x-full');
+            document.getElementById('settings-backdrop').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('settings-fab').classList.remove('hidden');
+        }
+
+        document.getElementById('settings-drawer').addEventListener('click', e => {
+            const btn = e.target.closest('[data-tab]');
+            if (btn) {
+                document.querySelectorAll('.tab-btn').forEach(b => {
+                    b.classList.remove('border-b-4', 'border-[var(--vh-accent-1)]', 'text-[var(--vh-accent-1)]');
+                    b.classList.add('text-[var(--vh-muted)]');
+                });
+                btn.classList.remove('text-[var(--vh-muted)]');
+                btn.classList.add('border-b-4', 'border-[var(--vh-accent-1)]', 'text-[var(--vh-accent-1)]');
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+                document.getElementById('panel-' + btn.dataset.tab).classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('settings-drawer').addEventListener('input', e => {
+            const input = e.target.closest('[data-set]');
+            if (!input) return;
+            const path = input.dataset.set;
+            let val = input.value;
+            if (input.type === 'checkbox') val = input.checked;
+            setByPath(config, path, val);
+            saveConfig();
+            if (path.startsWith('appearance.')) {
+                applyTheme();
+                if (path === 'appearance.fontFamily') loadFontFamily(val);
+                if (/^appearance\.show/.test(path)) renderVisibility();
+            } else {
+                renderPage();
+            }
+            if (path === 'appearance.blur' || path === 'appearance.radius') {
+                const rid = document.getElementById(readoutId(path));
+                if (rid) rid.textContent = val;
+            }
+        });
+
+        document.getElementById('settings-drawer').addEventListener('click', e => {
+            const addLink = e.target.closest('[data-add-link]');
+            if (addLink) {
+                const categoryKey = addLink.dataset.addLink;
+                if (!config.links[categoryKey]) config.links[categoryKey] = [];
+                config.links[categoryKey].push({ icon: '🔗', label: 'My link', url: 'https://example.com', sub: 'Click to visit' });
+                saveConfig();
+                renderSettings();
+                renderPage();
+                return;
+            }
+            const remLink = e.target.closest('[data-rem-link]');
+            if (remLink) {
+                const path = remLink.dataset.remLink;
+                const parts = path.split('.');
+                const arr = getByPath(config, parts.slice(0, -1).join('.'));
+                const idx = Number(parts[parts.length - 1]);
+                if (Array.isArray(arr)) arr.splice(idx, 1);
+                saveConfig();
+                renderSettings();
+                renderPage();
+                return;
+            }
+            const remCat = e.target.closest('[data-rem-cat]');
+            if (remCat) {
+                const ci = Number(remCat.dataset.remCat);
+                const catKey = config.categories[ci].key;
+                config.categories.splice(ci, 1);
+                delete config.links[catKey];
+                saveConfig();
+                renderSettings();
+                renderPage();
+                return;
+            }
+        });
+
+        function addCategory() {
+            const label = prompt('What should this category be called?', 'My Links');
+            if (!label) return;
+            const key = 'cat-' + Date.now();
+            config.categories.push({ key, label, preset: 'purple', collapsed: false });
+            config.links[key] = [];
+            saveConfig();
+            renderSettings();
+            renderPage();
+        }
+
+        function addSearchEngine() {
+            config.searchEngines.push({ name: 'Search', url: 'https://example.com/search?q={q}' });
+            saveConfig();
+            renderSettings();
+            renderPage();
+        }
+
+        /* ============ CONFIG IO ============ */
+        function exportConfig() {
+            const json = JSON.stringify(config, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'homepage-settings.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function importConfig(input) {
+            const file = input.files && input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    config = deepMerge(DEFAULT_CONFIG, imported);
+                    saveConfig();
+                    applyTheme();
+                    loadFontFamily(config.appearance.fontFamily);
+                    renderSettings();
+                    renderPage();
+                    alert('Settings loaded!');
+                } catch (err) {
+                    alert('That file didn\'t work. Please try again.');
+                }
+            };
+            reader.readAsText(file);
+            input.value = '';
+        }
+
+        function resetConfig() {
+            if (!confirm('Reset everything back to the start? You will lose your categories and links.')) return;
+            config = clone(DEFAULT_CONFIG);
+            saveConfig();
+            applyTheme();
+            loadFontFamily(config.appearance.fontFamily);
+            renderSettings();
+            renderPage();
+        }
+
+        /* ============ SEARCH ============ */
+        function setEngine(index) {
+            config.searchEngineIndex = Number(index);
+            saveConfig();
+            renderSearch();
+            document.getElementById('searchInput').focus();
+        }
+
+        function doSearch() {
+            const q = document.getElementById('searchInput').value.trim();
+            if (!q) return;
+            const eng = config.searchEngines[config.searchEngineIndex || 0];
+            let url = eng ? eng.url.replace('{q}', encodeURIComponent(q)) : 'https://www.google.com/search?q=' + encodeURIComponent(q);
+            if (q.includes('.') && !q.includes(' ')) {
+                window.open(q.startsWith('http') ? q : 'https://' + q, '_blank');
+            } else {
+                window.open(url, '_blank');
+            }
+        }
+
+        /* ============ COLLAPSE TOGGLE ============ */
+        function toggleSection(ci) {
+            const el = document.getElementById('sec-content-' + ci);
+            const arrow = document.getElementById('sec-arrow-' + ci);
+            const opened = el.classList.toggle('open');
+            arrow.classList.toggle('rotate-180');
+            if (config.categories[ci]) {
+                config.categories[ci].collapsed = !opened;
+                saveConfig();
+            }
+        }
+
+        /* ============ QUICK NOTES ============ */
+        const quickNotes = document.getElementById('quick-notes');
+        quickNotes.value = localStorage.getItem('quickNotes') || '';
+        function updateCharCount() { document.getElementById('char-count').textContent = quickNotes.value.length; }
+        quickNotes.addEventListener('input', () => {
+            localStorage.setItem('quickNotes', quickNotes.value);
+            updateCharCount();
+        });
+        updateCharCount();
+
+        /* ============ KEYBOARD ============ */
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                if (settingsOpen) closeSettings();
+                document.getElementById('searchInput').blur();
+            }
+            if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+        });
+
+        /* ============ INIT ============ */
+        document.addEventListener('DOMContentLoaded', () => {
+            loadConfig();
+            applyTheme();
+            loadFontFamily(config.appearance.fontFamily);
+            renderPage();
+            renderSettings();
+
+            const now = new Date();
+            updateClock();
+            setInterval(updateClock, 1000);
+
+            // Show tutorial once
+            try {
+                if (!localStorage.getItem(TUTORIAL_KEY)) {
+                    // small delay so the page paints first
+                    setTimeout(startTutorial, 800);
+                }
+            } catch (e) {}
+        });
+    </script>
 </body>
 </html>
