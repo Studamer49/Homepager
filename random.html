@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Key Generator</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎲</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #0f172a;
+            overflow: hidden;
+        }
+        .glow-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .blob {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);
+            filter: blur(100px);
+            border-radius: 50%;
+            z-index: -1;
+            animation: move 25s infinite alternate;
+        }
+        @keyframes move {
+            from { transform: translate(-20%, -20%) scale(1); }
+            to { transform: translate(30%, 30%) scale(1.1); }
+        }
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .number-glow {
+            text-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeInUp 0.6s ease both; }
+        .fade-in-d1 { animation-delay: 0.15s; }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex items-center justify-center p-4">
+    <div class="glow-bg">
+        <div class="blob" style="top: -200px; left: -200px;"></div>
+        <div class="blob" style="bottom: -200px; right: -200px; animation-delay: -7s;"></div>
+    </div>
+
+    <div class="glass p-10 sm:p-12 rounded-[3rem] shadow-2xl max-w-md w-full text-center transform transition-all hover:scale-[1.02] fade-in">
+        <h1 class="text-slate-400 uppercase tracking-[0.3em] font-light mb-8 text-sm">Generated Key</h1>
+
+        <div class="mb-10">
+            <p id="randomNumber" class="text-7xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-400 number-glow transition-opacity duration-150">
+                -----
+            </p>
+        </div>
+
+        <div class="space-y-4">
+            <button onclick="generate()" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold py-4 px-8 rounded-2xl shadow-lg shadow-purple-500/20 transition-all active:scale-95">
+                Generate New
+            </button>
+            <button onclick="copyKey()" id="copyBtn" class="w-full glass hover:bg-white/5 text-slate-300 font-semibold py-3 px-8 rounded-2xl transition-all active:scale-95">
+                Copy to Clipboard
+            </button>
+            <a href="vivu_homepage_redesigned.html" class="block text-slate-500 hover:text-slate-300 transition-colors font-medium tracking-wide mt-2">
+                ← Back to Home
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function generate() {
+            const el = document.getElementById('randomNumber');
+            el.style.opacity = '0';
+            setTimeout(() => {
+                el.textContent = getRandomInt(10000, 99999);
+                el.style.opacity = '1';
+            }, 150);
+        }
+
+        function copyKey() {
+            const key = document.getElementById('randomNumber').textContent;
+            if (key === '-----') return;
+            navigator.clipboard.writeText(key).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy to Clipboard', 1500);
+            });
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                generate();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', generate);
+    </script>
+</body>
+</html>
